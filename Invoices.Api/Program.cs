@@ -37,7 +37,7 @@ var connectionString = builder.Configuration.GetConnectionString("LocalInvoicesC
 
 builder.Services.AddDbContext<InvoicesDbContext>(options =>
     options.UseSqlServer(connectionString)
-        .UseLazyLoadingProxies(false)
+        .UseLazyLoadingProxies()
         .ConfigureWarnings(x => x.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning)));
 
 builder.Services.AddControllers().AddJsonOptions(options =>

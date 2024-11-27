@@ -45,17 +45,17 @@ public class InvoicesDbContext : DbContext
         modelBuilder
             .Entity<Invoice>()
             .HasOne(i => i.Seller)              // = kazda faktura ma 1 sellera
-            .WithMany(p => p.InvoicesAsSeller);  // = kazdy seller ma vice faktura, jsou ulozene ve vlastnosti InvoicesAsSeller
-            //.HasForeignKey(i => i.SellerId)     //
-            //.OnDelete(DeleteBehavior.Restrict); //
+            .WithMany(p => p.InvoicesAsSeller)  // = kazdy seller ma vice faktura, jsou ulozene ve vlastnosti InvoicesAsSeller
+            .HasForeignKey(i => i.SellerId)     //
+            .OnDelete(DeleteBehavior.Restrict); //
 
         // Buyer
         modelBuilder
             .Entity<Invoice>()
             .HasOne(i => i.Buyer)               // = kazda faktura ma 1 buyera
-            .WithMany(p => p.InvoicesAsBuyer);   // = kazdy buyer ma vice faktura, jsou ulozene ve vlastnosti InvoicesAsBuyer
-			//.HasForeignKey(i => i.BuyerId)      //
-            //.OnDelete(DeleteBehavior.Restrict); //
+            .WithMany(p => p.InvoicesAsBuyer)   // = kazdy buyer ma vice faktura, jsou ulozene ve vlastnosti InvoicesAsBuyer
+			.HasForeignKey(i => i.BuyerId)      //
+            .OnDelete(DeleteBehavior.Restrict); //
 
 
         // pri mazani Person zabranime mazani jeho faktur

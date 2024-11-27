@@ -18,13 +18,13 @@ namespace Invoices.Data.Models
 
         [Required]
         [ForeignKey(nameof(Seller))]
-        public ulong SellerId { get; set; }
-        public Person Seller { get; set; }
+        public ulong? SellerId { get; set; }
+        public virtual Person? Seller { get; set; }
 
 		[Required]
         [ForeignKey(nameof(Buyer))]
-        public ulong BuyerId { get; set; }
-		public Person? Buyer { get; set; }
+        public ulong? BuyerId { get; set; }
+		public virtual Person? Buyer { get; set; }
 
 		[Required]
         public DateTime Issued { get; set; }        // DateOnly nepouzivat
