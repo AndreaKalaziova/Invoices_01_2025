@@ -28,6 +28,4 @@ public interface IPersonRepository : IBaseRepository<Person>
 {
     IList<Person> GetAllByHidden(bool hidden);
 	Person? FindById(ulong id);
-
-	//decimal GetRevenue();
 }

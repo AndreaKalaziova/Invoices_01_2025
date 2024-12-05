@@ -112,10 +112,16 @@ public class PersonManager : IPersonManager
 
     }
 
-	public StatisticsPersonDto GetStatisticsPerson()
+	public List<StatisticsPersonDto> GetStatisticsPerson()
 	{
-		//return new StatisticsPersonDto { Revenue = personRepository.GetRevenue() };
-		return new StatisticsPersonDto();
-	}
+		IList<Person> persons = personRepository.GetAllByHidden(false);
+        List<StatisticsPersonDto> statistic = persons.Select(person => new StatisticsPersonDto
+        {
+            PersonId = person.PersonId,
+            Name = person.Name,
+            Revenue = person.InvoicesAsSeller.Sum(invoice => invoice.Price)
+        }).ToList();
+        return statistic;
+    }
 
 }

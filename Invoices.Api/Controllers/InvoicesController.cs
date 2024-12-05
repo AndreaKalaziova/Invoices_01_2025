@@ -38,12 +38,17 @@ public class InvoicesController : ControllerBase
 		return Ok(invoice);
 	}
 
+	[HttpGet]	// vypsani faktur dle filtru
+	public IEnumerable<InvoiceDto> GetInvoices([FromQuery] InvoiceFilterDto invoiceFilter)
+	{
+		return invoiceManager.GetAllInvoices(invoiceFilter);
+	}
 	
-    [HttpGet]   
-    public IEnumerable<InvoiceDto> GetInvoices()
-    {
-        return invoiceManager.GetAllInvoices();
-    }	// vypis vsech faktur, detailne -OK
+ //   [HttpGet]   
+ //   public IEnumerable<InvoiceDto> GetInvoices()    // vypis vsech faktur, detailne -OK
+	//{
+ //       return invoiceManager.GetAllInvoices();
+ //   }	
 
 	[HttpPut("{invoiceId}")]
 	public IActionResult UpdateInvoice(ulong invoiceId, [FromBody] InvoiceDto invoiceDto) // OK

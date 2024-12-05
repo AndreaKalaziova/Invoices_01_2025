@@ -33,7 +33,7 @@ public interface IPersonManager
 
     PersonDto? UpdatePerson(ulong id, PersonDto updatePerson ); // pro upravu osoby
 
-	StatisticsPersonDto GetStatisticsPerson();
+	List<StatisticsPersonDto> GetStatisticsPerson();
 
 }
 

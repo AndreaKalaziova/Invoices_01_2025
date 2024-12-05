@@ -36,6 +36,7 @@ public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
         return dbSet
             .Where(p => p.Hidden == hidden)
+            .Include(p => p.InvoicesPerPerson)  
             .ToList();
     }
 
@@ -43,20 +44,4 @@ public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
         return dbSet.Find(id);
     }
-
-	//public decimal GetRevenue()
-	//{
-	//	return dbSet
-	//		.Where(i => isSeller ? true : false &&
-	//				i => i.Seller != null)
-	//		.Sum(i => i.Price);
-	//}
-	//public IList<Invoice> GetAllInvoicesByIdentificationNumber(string identificationNumber, bool isSeller)
-	//{
-	//	return dbSet
-	//		.Include(i => i.Seller)
-	//		.Include(i => i.Buyer)
-	//		.Where(i => isSeller ? i.Seller.IdentificationNumber == identificationNumber : i.Buyer.IdentificationNumber == identificationNumber)
-	//		.ToList();
-	//}
 }

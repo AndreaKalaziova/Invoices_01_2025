@@ -34,9 +34,45 @@ public class InvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
     }
 
 
-    public IList<Invoice> GetAllInvoices()
+    public IList<Invoice> GetAllInvoices(
+        
+        //buyerId - vybere faktury s danym buyerem
+        ulong? buyerId = null,
+        //selledId - vybere faktury s danym sellerem
+        ulong? sellerId = null,
+        //product - ziska faktury, ktere obsahuji tento produkt
+        string? product = null,
+        //minprice - vybere faktury, s castkou vyssi nebo rovnou 
+        int? minPrice = null,
+        //maxPrice - faktury, s castkou nizsi nebo rovnoou
+        int? maxPrrice = null,
+        //limit - limit vyctu 
+        int? limit = null)
     {
-        return dbSet
+        IQueryable <Invoice> query = dbSet;
+
+        if (buyerId is not null)
+            query = query.Where(i =>  i.BuyerId == buyerId);
+
+        if (sellerId is not null)
+            query = query.Where(i => i.SellerId == sellerId);
+
+        if (product is not null)
+            query = query.Where (i => i.Product == product);
+
+        if (minPrice is not null)
+            query = query.Where(i => i.Price >=  minPrice.Value);
+
+        if (maxPrrice is not null)
+            query = query.Where(i => i.Price < +maxPrrice.Value);
+
+        if (limit is not null && limit >= 0)
+            query = query.Take(limit.Value);
+
+        // return query.ToList();
+
+        //return dbSet
+        return query
             .Include(i => i.Seller)
             .Include(i => i.Buyer)
             .ToList();

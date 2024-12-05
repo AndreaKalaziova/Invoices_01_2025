@@ -53,11 +53,32 @@ namespace Invoices.Api.Managers;
 		return mapper.Map<InvoiceDto>(addedInvoice);
 	}
 
+	//  public IList<InvoiceDto> GetAllInvoices() // vypis vsech faktur v db OK
+	//  {
+	//      IList<Invoice> invoices = invoiceRepository.GetAllInvoices(); 
+	//return mapper.Map<IList<InvoiceDto>>(invoices);
+	//  }
+
+	//vrati vsechny faktury dle filtru, pokud filter neni zadan, vrati vsechny f. v db
+	public IList<InvoiceDto> GetAllInvoices(InvoiceFilterDto? invoiceFilterDto = null)
+	{
+		IList<Invoice> invoices = invoiceFilterDto is null ?
+				invoiceRepository.GetAllInvoices() :
+				invoiceRepository.GetAllInvoices(
+					invoiceFilterDto.BuyerId,
+					invoiceFilterDto.SellerId,
+					invoiceFilterDto.Product,
+					invoiceFilterDto.MinPrice ?? int.MinValue,
+					invoiceFilterDto.MaxPrrice ?? int.MaxValue,
+					invoiceFilterDto.Limit ?? int.MaxValue);
+
+		return mapper.Map<IList<InvoiceDto>>(invoices);
+	}
 
 	public InvoiceDto? GetInvoice(ulong invoiceId)       // pro vypis jedne faktury dle Id - OK
 	{
-        Invoice? invoice = invoiceRepository.FindById(invoiceId);
-		
+		Invoice? invoice = invoiceRepository.FindById(invoiceId);
+
 		if (invoice is null)
 		{
 			return null;
@@ -65,12 +86,7 @@ namespace Invoices.Api.Managers;
 
 		return mapper.Map<InvoiceDto>(invoice);
 	}
-	
-    public IList<InvoiceDto> GetAllInvoices() // vypis vsech faktur v db OK
-    {
-        IList<Invoice> invoices = invoiceRepository.GetAllInvoices(); 
-		return mapper.Map<IList<InvoiceDto>>(invoices);
-    }
+
 
 	public InvoiceDto? UpdateInvoice(ulong invoiceId, InvoiceDto invoiceDto) // OK
 	{
@@ -114,10 +130,6 @@ namespace Invoices.Api.Managers;
 
 	public StatisticsInvoiceDto GetStatisticsInvoice()		// vytvoreni noveho objektu pro Sttaistiky Invoice pro vypis dle Dto
 	{
-		//double currentYearSum = invoiceRepository.GetCurrentYearSum();
-		//double allTimeSum = invoiceRepository.GetAllTimeSum();		
-		//double invoiceCount = invoiceRepository.GetInvoiceCount();
-
 		return new StatisticsInvoiceDto
 		{
 			CurrentYearSum = invoiceRepository.GetCurrentYearSum(),     //soucet cen za letosni rok currentYearSum
@@ -125,7 +137,6 @@ namespace Invoices.Api.Managers;
 			InvoiceCount = invoiceRepository.GetInvoiceCount()          //pocet faktur v databazi 
 		};
 	}
-
 }
 
 

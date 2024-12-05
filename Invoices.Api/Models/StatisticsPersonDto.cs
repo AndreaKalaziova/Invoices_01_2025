@@ -7,13 +7,9 @@ namespace Invoices.Api.Models
 	{
 		[JsonPropertyName("personId")]
 		public ulong PersonId { get; set; }
-
+		[JsonPropertyName("personName")]
 		public string Name { get; set; } = "";
 
-		public decimal Revenue { get; set; }
-
-		// seller - id & name +
-		// revenue - z vypoctu od invoice decimal price
-		//prehodit vse do person protoze api/persons/statistics
+		public double Revenue { get; set; }
 	}
 }

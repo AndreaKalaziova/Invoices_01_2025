@@ -89,7 +89,7 @@ public class PersonsController : ControllerBase
     [HttpGet("statistics")]
     public IActionResult GetStatisticsPerson()
     {
-        StatisticsPersonDto? statistics = personManager.GetStatisticsPerson();
+        List<StatisticsPersonDto?> statistics = personManager.GetStatisticsPerson();
 		return Ok(statistics);
 	}
 }      

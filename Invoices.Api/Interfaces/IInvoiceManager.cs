@@ -10,9 +10,12 @@ namespace Invoices.Api.Interfaces
 
         InvoiceDto? GetInvoice(ulong invoiceId);
 
-        IList<InvoiceDto> GetAllInvoices();
-        
-        InvoiceDto? UpdateInvoice(ulong invoiceId, InvoiceDto invoiceDto);
+        //IList<InvoiceDto> GetAllInvoices();
+ 
+        IList<InvoiceDto> GetAllInvoices(InvoiceFilterDto? invoiceFilterDto = null);
+
+
+		InvoiceDto? UpdateInvoice(ulong invoiceId, InvoiceDto invoiceDto);
 
         InvoiceDto? DeleteInvoice(uint invoiceId);
 
