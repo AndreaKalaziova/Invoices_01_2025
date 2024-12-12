@@ -33,9 +33,8 @@ public class InvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
     {
     }
 
+    public IList<Invoice> GetAll(
 
-    public IList<Invoice> GetAllInvoices(
-        
         //buyerId - vybere faktury s danym buyerem
         ulong? buyerId = null,
         //selledId - vybere faktury s danym sellerem
@@ -45,11 +44,11 @@ public class InvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
         //minprice - vybere faktury, s castkou vyssi nebo rovnou 
         int? minPrice = null,
         //maxPrice - faktury, s castkou nizsi nebo rovnoou
-        int? maxPrrice = null,
+        int? maxPrice = null,
         //limit - limit vyctu 
         int? limit = null)
     {
-        IQueryable <Invoice> query = dbSet;
+        IQueryable<Invoice> query = dbSet.AsQueryable();
 
         if (buyerId is not null)
             query = query.Where(i =>  i.BuyerId == buyerId);
@@ -57,25 +56,25 @@ public class InvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
         if (sellerId is not null)
             query = query.Where(i => i.SellerId == sellerId);
 
-        if (product is not null)
-            query = query.Where (i => i.Product == product);
+		//if (product is not null)
+		//    query = query.Where (i => i.Product == product);
+		if (!string.IsNullOrEmpty(product))
+			query = query.Where(i => i.Product.Contains(product));
 
-        if (minPrice is not null)
+
+		if (minPrice is not null)
             query = query.Where(i => i.Price >=  minPrice.Value);
 
-        if (maxPrrice is not null)
-            query = query.Where(i => i.Price < +maxPrrice.Value);
+        if (maxPrice is not null)
+            query = query.Where(i => i.Price <= maxPrice.Value);
 
-        if (limit is not null && limit >= 0)
+        if (limit is not null && limit > 0)
             query = query.Take(limit.Value);
 
         // return query.ToList();
-
+        Console.WriteLine();
         //return dbSet
-        return query
-            .Include(i => i.Seller)
-            .Include(i => i.Buyer)
-            .ToList();
+        return query.ToList();
     }
 
     public Invoice? FindById(ulong id)

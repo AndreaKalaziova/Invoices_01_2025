@@ -11,15 +11,15 @@ namespace Invoices.Data.Interfaces
 {
     public interface IInvoiceRepository : IBaseRepository<Invoice>
     {
-        IList<Invoice> GetAllInvoices(
+        IList<Invoice> GetAll(
 
 			ulong? buyerId = null,
 			ulong? sellerId = null,
 			string? product = null,
 			int? minPrice = null,
-			int? maxPrrice = null,
-			int? limit = null
-		);
+			int? maxPrice = null,
+			int? limit = null);
+
         Invoice? FindById(ulong id);
 
         IList<Invoice> GetAllInvoicesByIdentificationNumber(string identificationNumber, bool isSeller);

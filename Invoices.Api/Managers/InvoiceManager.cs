@@ -60,17 +60,20 @@ namespace Invoices.Api.Managers;
 	//  }
 
 	//vrati vsechny faktury dle filtru, pokud filter neni zadan, vrati vsechny f. v db
-	public IList<InvoiceDto> GetAllInvoices(InvoiceFilterDto? invoiceFilterDto = null)
+	public IList<InvoiceDto> GetAllInvoices(InvoiceFilterDto? invoiceFilterDto)
 	{
-		IList<Invoice> invoices = invoiceFilterDto is null ?
-				invoiceRepository.GetAllInvoices() :
-				invoiceRepository.GetAllInvoices(
+		IList<Invoice> invoices =
+				invoiceRepository.GetAll(
 					invoiceFilterDto.BuyerId,
 					invoiceFilterDto.SellerId,
 					invoiceFilterDto.Product,
-					invoiceFilterDto.MinPrice ?? int.MinValue,
-					invoiceFilterDto.MaxPrrice ?? int.MaxValue,
-					invoiceFilterDto.Limit ?? int.MaxValue);
+					invoiceFilterDto.MinPrice,
+					invoiceFilterDto.MaxPrice,
+					invoiceFilterDto.Limit);
+
+		//invoiceFilterDto.MinPrice ?? int.MinValue,
+		//invoiceFilterDto.MaxPrice ?? int.MaxValue,
+		//invoiceFilterDto.Limit ?? int.MaxValue);
 
 		return mapper.Map<IList<InvoiceDto>>(invoices);
 	}

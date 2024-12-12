@@ -26,7 +26,7 @@ namespace Invoices.Api.Managers
 
 		public IList<InvoiceDto> GetAllInvoices() // OK
 		{
-			IList<Invoice> invoices = invoiceRepository.GetAllInvoices();  
+			IList<Invoice> invoices = invoiceRepository.GetAll();  
 			return mapper.Map<IList<InvoiceDto>>(invoices);
 		}
 
