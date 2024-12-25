@@ -26,46 +26,57 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Invoices.Data;
 
+/// <summary>
+/// db context for managing Person and Invoice entities
+/// inherints from DbContext -  EF functionalities for db operations
+/// </summary>
 public class InvoicesDbContext : DbContext
 {
+    /// <summary>
+    /// DbSet representing collection of Person entities in db
+    /// </summary>
     public DbSet<Person>? Persons { get; set; }
 
-    public DbSet<Invoice>? Invoices { get; set; }
+	/// <summary>
+	/// DbSet representing collection of Invoice entities in db
+	/// </summary>
+	public DbSet<Invoice>? Invoices { get; set; }
 
 
     public InvoicesDbContext(DbContextOptions<InvoicesDbContext> options)
         : base(options)
-    {
-    }
+    {}
+    /// <summary>
+    /// set up of the relationships in model, using ModelBuilder
+    /// </summary>
+    /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Seller
+        // relatioship Seller & Invoices
+        modelBuilder
+            .Entity<Invoice>()                  
+            .HasOne(i => i.Seller)              // = each invoice has 1 seller
+            .WithMany(p => p.InvoicesAsSeller)  // = each seller has many invoices, listed in InvoicesAsSeller
+            .HasForeignKey(i => i.SellerId)     // SellerId is the foreigh key in the Invoice table
+            .OnDelete(DeleteBehavior.Restrict); // prevents deletion of the seller if has any invoices
+
+        // relationship Buyer & Invoices
         modelBuilder
             .Entity<Invoice>()
-            .HasOne(i => i.Seller)              // = kazda faktura ma 1 sellera
-            .WithMany(p => p.InvoicesAsSeller)  // = kazdy seller ma vice faktura, jsou ulozene ve vlastnosti InvoicesAsSeller
-            .HasForeignKey(i => i.SellerId)     //
-            .OnDelete(DeleteBehavior.Restrict); //
-
-        // Buyer
-        modelBuilder
-            .Entity<Invoice>()
-            .HasOne(i => i.Buyer)               // = kazda faktura ma 1 buyera
-            .WithMany(p => p.InvoicesAsBuyer)   // = kazdy buyer ma vice faktura, jsou ulozene ve vlastnosti InvoicesAsBuyer
-			.HasForeignKey(i => i.BuyerId)      //
-            .OnDelete(DeleteBehavior.Restrict); //
+            .HasOne(i => i.Buyer)               // = each invoice has 1 buyer
+            .WithMany(p => p.InvoicesAsBuyer)   // = each buyer has many invoice, listed in InvoicesAsBuyer
+			.HasForeignKey(i => i.BuyerId)      // BuyerId is the foreigh key in the Invoice table
+			.OnDelete(DeleteBehavior.Restrict); // prevents deletion of the seller if has any invoices
 
 
-        // pri mazani Person zabranime mazani jeho faktur
-        IEnumerable<IMutableForeignKey> cascadeFKs = modelBuilder.Model.GetEntityTypes()
-            .SelectMany(type => type.GetForeignKeys())
-            .Where(foreignKey => !foreignKey.IsOwnership && foreignKey.DeleteBehavior == DeleteBehavior.Cascade);
+		// prevents cascading deletion - when deleting person, we keep their invoices
+		IEnumerable<IMutableForeignKey> cascadeFKs = modelBuilder.Model.GetEntityTypes()
+            .SelectMany(type => type.GetForeignKeys())               // retrieve all foreighn keys
+            .Where(foreignKey => !foreignKey.IsOwnership && foreignKey.DeleteBehavior == DeleteBehavior.Cascade);   //look for cascade behaviour
 
-        foreach (IMutableForeignKey foreignKey in cascadeFKs)
+        foreach (IMutableForeignKey foreignKey in cascadeFKs)       // set all cascading foreight keys to restrict deletion
             foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
-
-
     }
 }

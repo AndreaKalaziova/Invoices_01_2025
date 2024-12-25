@@ -1,12 +1,8 @@
 ﻿using Invoices.Api.Models;
 using Invoices.Data.Interfaces;
 using Invoices.Data.Models;
-using System.Linq;
 using AutoMapper;
 using Invoices.Api.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using Microsoft.Identity.Client;
 
 namespace Invoices.Api.Managers;
 
@@ -83,9 +79,8 @@ namespace Invoices.Api.Managers;
 		Invoice? invoice = invoiceRepository.FindById(invoiceId);
 
 		if (invoice is null)
-		{
 			return null;
-		}
+		
 
 		return mapper.Map<InvoiceDto>(invoice);
 	}

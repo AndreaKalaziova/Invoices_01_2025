@@ -24,5 +24,8 @@ namespace Invoices.Data.Models;
 
 public enum Country
 {
-    CZECHIA, SLOVAKIA   // v db jako int 0, 1 
+	/// <summary>
+	/// country to select from Czechia / Slovakia ; in db as int 0, 1 
+	/// </summary>
+	CZECHIA, SLOVAKIA   
 }

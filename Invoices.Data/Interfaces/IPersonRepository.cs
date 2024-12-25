@@ -26,6 +26,16 @@ namespace Invoices.Data.Interfaces;
 
 public interface IPersonRepository : IBaseRepository<Person>
 {
-    IList<Person> GetAllByHidden(bool hidden);
+	/// <summary>
+	///  getting all the persons that are active (hidden = was deleted / hidden = false --> person is active)
+	/// </summary>
+	/// <param name="hidden"></param>
+	/// <returns>List of persons per hidden criteria true/false</returns>
+	IList<Person> GetAllByHidden(bool hidden);
+	/// <summary>
+	/// search person by PersonId in db
+	/// </summary>
+	/// <param name="id"></param>
+	/// <returns>requested person by Id</returns>
 	Person? FindById(ulong id);
 }

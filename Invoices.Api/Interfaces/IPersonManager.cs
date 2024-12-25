@@ -26,13 +26,39 @@ namespace Invoices.Api.Interfaces;
 
 public interface IPersonManager
 {
-    IList<PersonDto> GetAllPersons();
-    PersonDto AddPerson(PersonDto personDto);
-    PersonDto? GetPerson(ulong personId);   // pridano pro vypis jedne osoby dle Id
-    void DeletePerson(uint personId);
-
-    PersonDto? UpdatePerson(ulong id, PersonDto updatePerson ); // pro upravu osoby
-
+	/// <summary>
+	/// get all Persons that are active (not hidden)
+	/// </summary>
+	/// <returns>List of non-hodden Persons mapped to PersonDto objects</returns>
+	IList<PersonDto> GetAllPersons();
+	/// <summary>
+	/// add new Person to db
+	/// </summary>
+	/// <param name="personDto"></param>
+	/// <returns>added Person as PersonDto object</returns>
+	PersonDto AddPerson(PersonDto personDto);
+	/// <summary>
+	/// get a person by its Id
+	/// </summary>
+	/// <param name="personId"></param>
+	/// <returns>PersonDto object of the found Person, or null if not found</returns>
+	PersonDto? GetPerson(ulong personId);   
+	/// <summary>
+	/// person is not deleted from db, only hidden
+	/// </summary>
+	/// <param name="personId"></param>
+	void DeletePerson(uint personId);
+	/// <summary>
+	/// update Person with new data, generating new Id, original person with origin Id remains hidden
+	/// </summary>
+	/// <param name="personId"></param>
+	/// <param name="updatePersonDto"></param>
+	/// <returns>updated Person with new Id</returns>
+	PersonDto? UpdatePerson(ulong id, PersonDto updatePerson ); 
+	/// <summary>
+	/// get statistics for all Persons
+	/// </summary>
+	/// <returns>PersonId - its name - its revenue - its turnover - its profit</returns>
 	List<StatisticsPersonDto> GetStatisticsPerson();
 
 }

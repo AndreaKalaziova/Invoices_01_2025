@@ -25,21 +25,34 @@ using Invoices.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Data.Repositories;
-
+/// <summary>
+/// repository class for managing Person(company) entities in the db
+/// Inherits basic CRUD operations from the vase repository
+/// </summary>
 public class PersonRepository : BaseRepository<Person>, IPersonRepository
 {
     public PersonRepository(InvoicesDbContext invoicesDbContext) : base(invoicesDbContext)
     {
     }
 
+    /// <summary>
+    /// getting all the persons that are active (hidden = was deleted / hidden = false --> person is active)
+    /// </summary>
+    /// <param name="hidden" is set to false ></param>
+    /// <returns>List of persons per hidden criteria true/false</returns>
     public IList<Person> GetAllByHidden(bool hidden)
     {
         return dbSet
-            .Where(p => p.Hidden == hidden)
-            .Include(p => p.InvoicesPerPerson)  
-            .ToList();
+            .Where(p => p.Hidden == hidden) //filters person by hidden true/false (default)
+            .Include(p => p.InvoicesPerPerson)  // includes invoices by person 
+            .ToList();  //founded entities included in a List
     }
 
+    /// <summary>
+    /// search person by Person Id in db
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>requested person by Id</returns>
     public Person? FindById(ulong id)
     {
         return dbSet.Find(id);

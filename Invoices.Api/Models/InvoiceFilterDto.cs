@@ -6,8 +6,8 @@ namespace Invoices.Api.Models
 	{// Mapování "buyer" na "BuyerId"
 									//buyerId - vybere faktury s danym buyerem
 		public ulong? BuyerId {  get; set; }
- // Mapování "seller" na "SellerId"
-									 //selledId - vybere faktury s danym sellerem
+		// Mapování "seller" na "SellerId"
+		//selledId - vybere faktury s danym sellerem
 		public ulong? SellerId { get; set; }
 		//product - ziska faktury, ktere obsahuji tento produkt
 		public string? Product { get; set; }
