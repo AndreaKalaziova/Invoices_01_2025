@@ -17,23 +17,29 @@ namespace Invoices.Api.Controllers
 			this.identificationManager = identificationManager;
 			this.mapper = mapper;
 		}
-
-		// vypis vsech vystavenych faktur, dle seller ICO
+		/// <summary>
+		/// get all invoices by IdentificationNumber, where person is seller
+		/// </summary>
+		/// <param name="identificationNumber"></param>
+		/// <returns>list of invoices as seller</returns>
 		[HttpGet("{identificationNumber}/sales")]
 		public IEnumerable<InvoiceDto> GetInvoicesBySellerIdentificationNumber(string identificationNumber)
 		{
 			return identificationManager
 				.GetInvoicesBySellerIdentificationNumber(identificationNumber)
-				.Select(invoice => mapper.Map<InvoiceDto>(invoice));
+				.Select(invoice => mapper.Map<InvoiceDto>(invoice));    // map each invoice entity to its corresponding DTO.
 		}
-
-		// vypis vsech prijatych faktur, dle buyer ICO
+		/// <summary>
+		/// get all invoices by IdentificationNumber, where person is buyer
+		/// </summary>
+		/// <param name="identificationNumber"></param>
+		/// <returns>lits of invoices as buyer</returns>
 		[HttpGet("{identificationNumber}/purchases")]
 		public IEnumerable<InvoiceDto> GetInvoicesByBuyerIdentificationNumber(string identificationNumber)
 		{
 			return identificationManager
 				.GetInvoicesByBuyerIdentificationNumber(identificationNumber)
-				.Select(invoice => mapper.Map<InvoiceDto>(invoice));
+				.Select(invoice => mapper.Map<InvoiceDto>(invoice));    // map each invoice entity to its corresponding DTO.
 		}
 	}
 }

@@ -64,5 +64,11 @@ namespace Invoices.Data.Interfaces
 		/// </summary>
 		/// <returns></returns>
 		double GetInvoiceCount();
+		/// <summary>
+		/// Checks if an invoice with the given InvoiceNumber exists in the repository.
+		/// </summary>
+		/// <param name="invoiceNumber">The InvoiceNumber to check.</param>
+		/// <returns>True if an invoice with the InvoiceNumber exists; otherwise, false.</returns>
+		bool ExistsWithInvoiceNumber(ulong invoiceNumber);
 	}
 }

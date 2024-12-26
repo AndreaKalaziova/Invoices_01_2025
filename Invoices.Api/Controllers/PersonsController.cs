@@ -61,7 +61,7 @@ public class PersonsController : ControllerBase
 	[HttpGet("{personId}")]     // above class add [ApiController / for display one person per Id - api/person/1
     public IActionResult GetPerson(ulong personId)
     {
-        if (personId == 0)
+        if (personId <= 0)
             return BadRequest("PersonId musí být větší než 0");
 
         PersonDto? person = personManager.GetPerson(personId);
@@ -82,13 +82,21 @@ public class PersonsController : ControllerBase
     public IActionResult AddPerson([FromBody] PersonDto person)
     {
         //check if PersonDto inserted as per reqirements
-		if (!ModelState.IsValid)
-			return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-		PersonDto? createdPerson = personManager.AddPerson(person);
-        return StatusCode(StatusCodes.Status201Created, createdPerson);
+        try
+        {
+            //attempt to add the person
+            PersonDto? createdPerson = personManager.AddPerson(person);
+            return StatusCode(StatusCodes.Status201Created, createdPerson);
+        }
+        catch (InvalidOperationException ex)
+        {
+            //return conflict response if IdentificationNumber already exists
+            return Conflict(new { message = ex.Message });
+        }
     }
-
     /// <summary>
     /// Person is not deleted permanently, only hidden 
     /// </summary>
@@ -96,7 +104,7 @@ public class PersonsController : ControllerBase
     [HttpDelete("{personId}")]
     public IActionResult DeletePerson(uint personId)
     {
-		if (personId == 0)
+		if (personId <= 0)
 			return BadRequest("PersonId musí být větší než 0");
 
         try
@@ -123,7 +131,7 @@ public class PersonsController : ControllerBase
         if (!ModelState.IsValid)
 			return BadRequest(ModelState);
 
-		if (personId == 0)
+		if (personId <= 0)
 			return BadRequest("PersonId musí být větší než 0");
 
         try
@@ -137,7 +145,7 @@ public class PersonsController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message); //400 Bad Request with errir message
+            return BadRequest(ex.Message); //400 Bad Request with error message
         }
         catch (Exception ex)
         {

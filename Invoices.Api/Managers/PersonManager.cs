@@ -62,14 +62,12 @@ public class PersonManager : IPersonManager
         //find the Person by Id
         Person? person = personRepository.FindById(personId);
 
-		//if the person does not exist, return null
-		if (!personRepository.ExistsWithId(personId))
-			return null;
-		//if (person is null)
-		//    return null;
+        //if the person does not exist, return null
+        if (person is null)
+            return null;
 
-		//map the Person entuty to PersonDto object and return it
-		return mapper.Map<PersonDto>(person);
+        //map the Person entuty to PersonDto object and return it
+        return mapper.Map<PersonDto>(person);
     }
 
     /// <summary>
@@ -78,8 +76,13 @@ public class PersonManager : IPersonManager
     /// <param name="personDto"></param>
     /// <returns>added Person as PersonDto object</returns>
     public PersonDto AddPerson(PersonDto personDto)
-    {        
-        Person person = mapper.Map<Person>(personDto);          //map the PersonDto to a Person entity
+    {
+
+		// Check if a person with the same IdentificationNumber already exists
+		if (personRepository.ExistsWithIdentificationNumber(personDto.IdentificationNumber))
+			throw new InvalidOperationException($"IČO {personDto.IdentificationNumber} je již použito.");
+		
+		Person person = mapper.Map<Person>(personDto);          //map the PersonDto to a Person entity
         person.PersonId = default;                              //new Id added to new Person
         Person addedPerson = personRepository.Insert(person);   // insert the new added Person into repository and etrieve it
 
@@ -108,10 +111,8 @@ public class PersonManager : IPersonManager
 		Person? person = personRepository.FindById(personId);
 
         //if the person does not exist, return null
-        if (!personRepository.ExistsWithId(personId))
+        if (person is null)
             return null;
-		//if (person is null)
-        //      return null;
 
         //bool hidden change to true -> inactive
         person.Hidden = true;
@@ -129,14 +130,12 @@ public class PersonManager : IPersonManager
         // get Person by Id
         Person? person = personRepository.FindById(personId);
 
-		// if Person not found, return null
-		if (!personRepository.ExistsWithId(personId))
-			return null;
-		//if (person is null)
-  //          return null;
+        // if Person not found, return null
+        if (person is null)
+            return null;
 
-		// Check for attempts to modify immutable fields IdentificationNumber or taxNumber
-		if (person.IdentificationNumber != updatePersonDto.IdentificationNumber)
+        // Check for attempts to modify immutable fields IdentificationNumber or taxNumber
+        if (person.IdentificationNumber != updatePersonDto.IdentificationNumber)
 		{
 			throw new InvalidOperationException("IČO nelze měnit");
 		}

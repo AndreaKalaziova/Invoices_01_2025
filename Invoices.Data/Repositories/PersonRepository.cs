@@ -57,4 +57,14 @@ public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
         return dbSet.Find(id);
     }
+	/// <summary>
+	/// Checks if a person with the given IdentificationNumber exists in the repository
+	/// </summary>
+	/// <param name="identificationNumber">The IdentificationNumber to check.</param>
+	/// <returns>True if a person with the IdentificationNumber exists; otherwise, false.</returns>
+	public bool ExistsWithIdentificationNumber(string identificationNumber)
+	{
+		// Use a query to check for existence
+		return invoicesDbContext.Persons.Any(p => p.IdentificationNumber == identificationNumber);
+	}
 }

@@ -31,7 +31,7 @@ public class PersonDto
     /// <summary>
     /// name of Person/Company, max 150characters
     /// </summary>
-    [StringLength(150, ErrorMessage = "Název může mít maximálne 100 znaků.")]
+    [MaxLength(100, ErrorMessage = "Název může mít maximálaně 100 znaků.")]
     public string Name { get; set; } = "";
 	/// <summary>
 	/// Identification number of the person (format-specific validation added).
@@ -39,25 +39,25 @@ public class PersonDto
 	[RegularExpression(@"^\d{8}$", ErrorMessage = "Invalidní formát IČO.")]
 	public string IdentificationNumber { get; set; } = "";
 	/// <summary>
-	/// tax number of Person, max 20characters
+	/// tax number of Person, 8-20characters
 	/// </summary>
-    [MaxLength(20)]
-    public string TaxNumber { get; set; } = "";
+	[MaxLength(20, ErrorMessage = "DIČ musí mít délku mezi 8 a 20 znaky.")]
+	public string TaxNumber { get; set; } = "";
 	/// <summary>
-	/// Bank account number of Person, max 34characters
+	/// Bank account number of Person, 8-34characters
 	/// </summary>
-    [MaxLength(34)] //IBAN limit
+	[MaxLength(34)]
     public string AccountNumber { get; set; } = "";
 	/// <summary>
-	/// Bank Code of the Person, max 10characters
+	/// Bank Code of the Person, 3-10characters
 	/// </summary>
-    [MaxLength(10)]
+	[MaxLength(10)]
     public string BankCode { get; set; } = "";
 	/// <summary>
-	/// IBAN of the Person's bank account, max 34characters
+	/// IBAN of the Person's bank account, 8-34characters
 	/// </summary>
-    [MaxLength(34)]
-    public string Iban { get; set; } = "";
+	[MaxLength(34)]
+	public string Iban { get; set; } = "";
 	/// <summary>
 	/// Telephone number of Person (format-specific validation added +420 111 222 333)
 	/// </summary>
@@ -71,15 +71,15 @@ public class PersonDto
 	/// <summary>
 	/// Person's adrs street 
 	/// </summary>
-    public string Street { get; set; } = "";
+	public string Street { get; set; } = "";
 	/// <summary>
 	/// Person's adrs ZIP 
 	/// </summary>
-    public string Zip { get; set; } = "";
+	public string Zip { get; set; } = "";
 	/// <summary>
 	/// Person's adrs city 
 	/// </summary>
-    public string City { get; set; } = "";
+	public string City { get; set; } = "";
 	/// <summary>
 	/// Person's adrs Country (required), Czechia / Slovakia
 	/// </summary>
@@ -88,7 +88,8 @@ public class PersonDto
 	/// <summary>
 	/// Person's unique id with JSON property name
 	/// </summary>
-    public string Note { get; set; } = "";
+	[MaxLength(150,ErrorMessage = "Poznámka musí mít délku mezi 2 a 150 znaky.")]
+	public string Note { get; set; } = "";
     [JsonPropertyName("_id")]
     public ulong PersonId { get; set; }
 }

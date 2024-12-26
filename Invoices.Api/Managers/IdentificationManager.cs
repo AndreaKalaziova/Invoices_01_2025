@@ -6,11 +6,14 @@ using Invoices.Data.Models;
 
 namespace Invoices.Api.Managers
 {
+	/// <summary>
+	/// working with IdentificationNumber as criterium
+	/// </summary>
 	public class IdentificationManager : IIdentificationManager
 	{
-		private readonly IInvoiceRepository invoiceRepository;
-		private readonly IPersonRepository personRepository;
-		private readonly IMapper mapper;
+		private readonly IInvoiceRepository invoiceRepository;	//repository to manage db operations for Invoice entities
+		private readonly IPersonRepository personRepository;	// repository to manage db operations for person entities
+		private readonly IMapper mapper;						// automapper for mapping between entity and DTO objects
 
 
 		public IdentificationManager(
@@ -18,41 +21,57 @@ namespace Invoices.Api.Managers
 			IPersonRepository personRepository,
 			IMapper mapper)
 		{
-			this.invoiceRepository = invoiceRepository;
-			this.personRepository = personRepository;
-			this.mapper = mapper;
+			this.invoiceRepository = invoiceRepository;	// DI for Invoice repository
+			this.personRepository = personRepository;	// DI for Person repository
+			this.mapper = mapper;						// DI for Automapper
 		}
-
-
-		public IList<InvoiceDto> GetAllInvoices() // OK
+		/// <summary>
+		/// get all invoices in db
+		/// </summary>
+		/// <returns>List of invoices</returns>
+		public IList<InvoiceDto> GetAllInvoices() 
 		{
+			//get all invoices
 			IList<Invoice> invoices = invoiceRepository.GetAll();  
+			// map teh Invoice entities to InvoiceDto objects and return the list of Invoices
 			return mapper.Map<IList<InvoiceDto>>(invoices);
 		}
 
-		// vypis vsech faktur dle ICO
+		/// <summary>
+		/// get all invoices based on provided IdentificationNumber of person
+		/// </summary>
+		/// <param name="identificationNumber"></param>
+		/// <param name="isSeller">terary expression isSeller? true = seller : false = buyerr</param>
+		/// <returns>list of invoices for selected Identification Number</returns>
 		public IList<Invoice> GetAllInvoicesByIdentificationNumber(string identificationNumber, bool isSeller)
 		{ 
+			//per isSeller filter out invoices by IdenticicationNumber of the Person as seller or buyer
 			IList<Invoice> invoices = invoiceRepository.GetAllInvoicesByIdentificationNumber(identificationNumber, isSeller);
 			return mapper.Map<IList<Invoice>>(invoices);
 		}
 
-		// vypis vsech vystavenych faktur, dle seller ICO
+		/// <summary>
+		/// get all invoices by IdentificationNumber, where person is seller
+		/// </summary>
+		/// <param name="indentificationNumber"></param>
+		/// <returns>list of invoices as seller</returns>
 		public IList<Invoice> GetInvoicesBySellerIdentificationNumber(string indentificationNumber)
 		{
 			//IList<Invoice> invoices = invoiceRepository.GetInvoicesBySellerIdentificationNumber(IdentificationNumber);  
 			//return mapper.Map<IList<Invoice>>(invoices);
-			//nize zkraceny zapis:
+			//shorter code:
 			return invoiceRepository.GetInvoicesBySellerIdentificationNumber(indentificationNumber);
 		}
 
-		//vypis vsech prijatuch faktur, dle buyer ICO
+		/// <summary>
+		/// get all invoices by IdentificationNumber, where person is buyer
+		/// </summary>
+		/// <param name="indentificationNumber"></param>
+		/// <returns>lits of invoices as buyer</returns>
 		public IList<Invoice> GetInvoicesByBuyerIdentificationNumber(string indentificationNumber)
 		{
 			IList<Invoice> invoices = invoiceRepository.GetInvoicesByBuyerIdentificationNumber(indentificationNumber);  
 			return mapper.Map<IList<Invoice>>(invoices);
-		}
-
-		
+		}	
 	}
 }

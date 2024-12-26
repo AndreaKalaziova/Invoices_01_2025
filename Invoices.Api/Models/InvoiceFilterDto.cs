@@ -1,21 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
+﻿
 namespace Invoices.Api.Models
 {
+	/// <summary>
+	/// DTO for invoice filets
+	/// </summary>
 	public class InvoiceFilterDto
-	{// Mapování "buyer" na "BuyerId"
-									//buyerId - vybere faktury s danym buyerem
+	{
+		/// <summary>
+		/// for invoices with sellected buyer
+		/// map seller and buyerId
+		/// </summary>
 		public ulong? BuyerId {  get; set; }
-		// Mapování "seller" na "SellerId"
-		//selledId - vybere faktury s danym sellerem
+		/// <summary>
+		/// for invoices with sellected seller
+		/// map seller and sellerId
+		/// </summary>
 		public ulong? SellerId { get; set; }
-		//product - ziska faktury, ktere obsahuji tento produkt
+		/// <summary>
+		/// for invoices with specified product
+		/// </summary>
 		public string? Product { get; set; }
-		//minprice - vybere faktury, s castkou vyssi nebo rovnou 
+		/// <summary>
+		/// for invoices with Price equal or higher then specified
+		/// </summary>
 		public int? MinPrice { get; set; }
-		//maxPrice - faktury, s castkou nizsi nebo rovnoou
+		/// <summary>
+		/// for invoices with Price equal or lower then specified
+		/// </summary>
 		public int? MaxPrice { get; set; }
-		//limit - limit vyctu 
+		/// <summary>
+		/// limit od return foundings
+		/// </summary>
 		public int? Limit { get; set; }
 	}
 }

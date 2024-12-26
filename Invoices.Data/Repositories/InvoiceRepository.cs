@@ -31,13 +31,8 @@ namespace Invoices.Data.Repositories;
 /// </summary>
 public class InvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
 {
-    /// <summary>
-    /// constructor that inicializes the repository with the db context
-    /// </summary>
-    /// <param name="invoicesDbContext"> The db contaxt used to access the invoice</param>
     public InvoiceRepository(InvoicesDbContext invoicesDbContext) : base(invoicesDbContext)
-    {
-    }
+    {}
 	/// <summary>
 	/// return all invoice if no filter applied, or filtered by filters 
 	/// </summary>
@@ -98,6 +93,16 @@ public class InvoiceRepository : BaseRepository<Invoice>, IInvoiceRepository
             .Include(i => i.Seller)     // include Seller entity
             .Include(i => i.Buyer)      // include Buyer entity
             .FirstOrDefault(i => i.InvoiceId == id); // find the first match or return null if not found
+	}
+	/// <summary>
+	/// Checks if an invoice with the given InvoiceNumber exists in the repository.
+	/// </summary>
+	/// <param name="invoiceNumber">The InvoiceNumber to check.</param>
+	/// <returns>True if an invoice with the InvoiceNumber exists; otherwise, false.</returns>
+	public bool ExistsWithInvoiceNumber(ulong invoiceNumber)
+	{
+		// Use a query to check for existence
+		return invoicesDbContext.Invoices.Any(i => i.InvoiceNumber == invoiceNumber);
 	}
 	/// <summary>
 	/// get all invoices by person's ICO

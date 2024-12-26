@@ -38,4 +38,10 @@ public interface IPersonRepository : IBaseRepository<Person>
 	/// <param name="id"></param>
 	/// <returns>requested person by Id</returns>
 	Person? FindById(ulong id);
+	/// <summary>
+	/// Checks if a person with the given IdentificationNumber exists in the repository
+	/// </summary>
+	/// <param name="identificationNumber">The IdentificationNumber to check.</param>
+	/// <returns>True if a person with the IdentificationNumber exists; otherwise, false.</returns>
+	bool ExistsWithIdentificationNumber(string identificationNumber);
 }
