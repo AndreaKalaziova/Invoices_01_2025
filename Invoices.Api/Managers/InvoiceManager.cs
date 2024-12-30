@@ -120,10 +120,13 @@ namespace Invoices.Api.Managers;
 		if (seller is null || buyer is null)
 			return null;
 
-		// Check if an invoice with the same InvoiceNumber already exists
-		if (invoiceRepository.ExistsWithInvoiceNumber(invoiceDto.InvoiceNumber))
-			throw new InvalidOperationException($"Čislo faktury {invoiceDto.InvoiceNumber} je již použito.");
-
+		//check if the invoice number has changed - if did not, omits checking if it already exists
+		if (invoice.InvoiceNumber != invoiceDto.InvoiceNumber)
+		{
+			// if inv.Number was edited then check if an invoice with the same InvoiceNumber already exists
+			if (invoiceRepository.ExistsWithInvoiceNumber(invoiceDto.InvoiceNumber))
+				throw new InvalidOperationException($"Čislo faktury {invoiceDto.InvoiceNumber} je již použito.");
+		}
 		//map new date from Dto to the existing invoice entity
 		mapper.Map<InvoiceDto, Invoice>(invoiceDto, invoice);
 		invoice.InvoiceId = invoiceId;			// ensure the correct invoice id is maintained

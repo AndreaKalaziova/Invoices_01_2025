@@ -134,15 +134,10 @@ public class PersonManager : IPersonManager
         if (person is null)
             return null;
 
-        // Check for attempts to modify immutable fields IdentificationNumber or taxNumber
+        // Check for attempts to modify immutable fields IdentificationNumber
         if (person.IdentificationNumber != updatePersonDto.IdentificationNumber)
 		{
 			throw new InvalidOperationException("IČO nelze měnit");
-		}
-
-		if (person.TaxNumber != updatePersonDto.TaxNumber)
-		{
-			throw new InvalidOperationException("DIČ nelze měnit");
 		}
 
 		//if Person found, bool hidden changes to true -> hence is hidden and not active
