@@ -1,4 +1,3 @@
-web aplication as final project for ITNetwork course
-Accounting web application with person (companies) and its invoices. CRUD, filtering, statistics
-BackEnd validation - duplicity Invoice Number, duplici Identification Number (IČO), due Date later then Issue Date, for Id only >0 numbers accepted, price only >0 accepted, VAT 0-100% accepted
-FrontEnd validation - duplicity Invoice Number, duplici Identification Number (IČO), due Date later then Issue Date, for Id only >0 numbers accepted, price only >0 accepted, VAT 0-100% accepted
+web aplication as final project for ITNetwork course.
+Accounting web application with person (companies) and its invoices. 
+A prototype was provided, for which I implemented basic CRUD operations and statistics on the data in the database, added another entity and its operations, filtering, connected to the API, created a frontend in React, added validations on the backend and frontend, tested manually and via Postman
